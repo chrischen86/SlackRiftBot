@@ -1,0 +1,14 @@
+{
+    "name": "vendor/rift-bot",
+    "description": "Description of project RiftBot.",
+    "authors": [
+        {
+            "name": "chris",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+        "silex/silex": "~2.0",
+        "nategood/httpful": "*"
+    }
+}
