@@ -2,50 +2,34 @@
 require_once __DIR__.'/../vendor/autoload.php';
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use models\Field;
+use dal\DataAccessAdapter;
 
 $app = new Silex\Application();
 $app['debug'] = true;
 // ... definitions
 
-//$TimeRegex = "/([01]?[0-9]|2[0-3])\:+[0-5][0-9]$/";
-//if (preg_match($TimeRegex, 'Yondu 4:45', $matches))
+//$TimeRegex = "/\d+.*$/";
+//if (preg_match($TimeRegex, 'Yondu 10 minutes before rollover', $matches))
 //        {
 //            //$dto->time = $matches[0];
 //            echo 'test' . $matches[0];
 //        }
 //        exit();
 
+$messageProcessorFactory = new \framework\MessageProcessorFactory();
+
+$app->get('', function (Request $request){
+    $adapter = new DataAccessAdapter();
+    $adapter->CreateRift();
+    $adapter->GetRifts();
+});
+
 $app->post('/rift', function(Request $request){
-    $processor = new framework\MessageProcessor();
-    $dto = $processor->Process($request);
+    $messageProcessorFactory = new \framework\MessageProcessorFactory();
+    $processor = $messageProcessorFactory->CreateProcessor($request);
     
-    $response = array(
-        'text' => '*************** *Scheduled Rift* ***************',
-        'response_type' => 'in_channel',
-        'attachments' => array(
-            array(
-                'color' => '#439FE0',
-                'fields' => array(
-                    new Field('Owner', $dto->owner),
-                    new Field('Type', $dto->riftKind),
-                    new Field('Time', $dto->time, false),
-                ),
-                'thumb_url' => 'http://onlinefanatic.com/wp-content/uploads/2016/06/Angela.jpg'
-            )
-        ),
-    );
-    $responseString = json_encode($response);
-    $responseString = preg_replace('/\\\\\\\n/','\n', $responseString);
-    
-    $responseObject = new Response($responseString, 200);
-    $responseObject->headers->set('Content-Type', 'application/json');
-    //return $responseObject;
-        
-    $response_url = $request->get('response_url');
-    $restClient = \Httpful\Request::post($response_url)
-            ->body($responseString)
-            ->send();
+    $processor->Process($request);
+    $processor->SendResponse();  
     
     return new Response('', 200);
 });

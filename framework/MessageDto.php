@@ -13,9 +13,24 @@ namespace framework;
  *
  * @author chris
  */
-class MessageDto {
+class BaseMessageDto {
+
+    public $responseUri;
+
+}
+
+class CancelMessageDto extends BaseMessageDto {
+
+    public $isSuccessful;
+
+}
+
+class MessageDto extends BaseMessageDto {
+
     //put your code here
     public $riftKind;
     public $time;
     public $owner;
+    public $thumbUri;
+
 }

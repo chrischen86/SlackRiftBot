@@ -32,7 +32,8 @@ class RiftKind {
                 "Ultron",
                 "Giant Man",
                 "Yellow Jacket",
-                "Wasp"
+                "Wasp",
+                "Ant Man",
             );
         }
         return self::$names;
