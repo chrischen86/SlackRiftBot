@@ -45,4 +45,21 @@ class DataAccessAdapter {
         $sql = "INSERT INTO test(`username`, `date_created`) VALUES ('test', UTC_TIMESTAMP())";
         $this->conn->query($sql);
     }
+    
+    public function UpsertUser($id, $userName, $vip=0)
+    {
+        $sql = "INSERT INTO users(`id`, `name`, `vip`) VALUES ('$id', '$userName', $vip)" .
+                " ON DUPLICATE KEY UPDATE name='$userName', vip=$vip";
+        $result = $this->conn->query($sql);        
+    }
+    
+    public function GetUser($id)
+    {
+        $sql = "SELECT * from users WHERE id='$id'";
+        $result = $this->conn->query($sql);
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+        return null;
+    }
 }

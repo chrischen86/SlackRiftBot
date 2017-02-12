@@ -11,6 +11,7 @@ namespace framework;
 use models\Field;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use dal\DataAccessAdapter;
 
 /**
  * Description of MessageProcessor
@@ -37,13 +38,13 @@ class MessageProcessor implements IMessageProcessor {
 
     public function SendResponse() {
         $dto = $this->response;
-        
+        $colour = $this->GetColour();
         $response = array(
             'text' => '*************** *Scheduled Rift* ***************',
             'response_type' => 'in_channel',
             'attachments' => array(
                 array(
-                    'color' => '#439FE0',
+                    'color' => $colour,
                     'fields' => array(
                         new Field('Owner', $dto->owner),
                         new Field('Type', $dto->riftKind),
@@ -122,6 +123,7 @@ class MessageProcessor implements IMessageProcessor {
 
     private function ProcessOwner(Request $message, MessageDto &$dto) {
         $dto->owner = $message->get("user_name");
+        $dto->userId = $message->get("user_id");
     }
 
     private function ProcessType(Request $message, MessageDto &$dto) {
@@ -134,4 +136,45 @@ class MessageProcessor implements IMessageProcessor {
         }
     }
 
+    private function GetColour()
+    {
+        $userId = $this->response->userId;
+        $adapter = new DataAccessAdapter();
+        $user = $adapter->GetUser($userId);
+        if ($user == null)
+        {
+            return RiftLevel::$Normal;
+        }
+        
+        switch ($user["vip"])
+        {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return RiftLevel::$Advanced;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                return RiftLevel::$Rare;
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+                return RiftLevel::$Heroic;
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+                return RiftLevel::$Legendary;
+            case 20:
+                return RiftLevel::$Mythic;
+            default:
+                return RiftLevel::$Normal;
+        }
+    }
 }

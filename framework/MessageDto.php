@@ -15,6 +15,7 @@ namespace framework;
  */
 class BaseMessageDto {
 
+    public $userId;
     public $responseUri;
 
 }
@@ -22,6 +23,13 @@ class BaseMessageDto {
 class CancelMessageDto extends BaseMessageDto {
 
     public $isSuccessful;
+
+}
+
+class ConfigureMessageDto extends BaseMessageDto {
+
+    public $setting;
+    public $value;
 
 }
 

@@ -15,7 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class MessageProcessorFactory {
     //put your code here
-    private $CancelRegex = "/cancel/";
+    private $CancelRegex = "/cancel/i";
+    private $ConfigureRegex = '/configure|config/i';
     
     public function CreateProcessor(Request $request)
     {        
@@ -23,6 +24,10 @@ class MessageProcessorFactory {
         if (preg_match($this->CancelRegex, $commandArguments))
         {
             return new CancelMessageProcessor();
+        }
+        if (preg_match($this->ConfigureRegex, $commandArguments))
+        {
+            return new ConfigureMessageProcessor();
         }
         return new MessageProcessor();
     }
