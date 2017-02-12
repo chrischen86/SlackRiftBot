@@ -11,7 +11,13 @@
  *
  * @author chris
  */
+ 
 class Config {
-    //put your code here
-    public static $SlackToken = 'Your token here';
+    //configure your own values here
+    public static $SlackToken = 'token';
+    
+    public static $Servername = "localhost";
+    public static $Username = "username";
+    public static $Password = "password";
+    public static $Dbname = "dbname";
 }
