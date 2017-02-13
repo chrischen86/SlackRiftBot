@@ -60,7 +60,7 @@ class CancelMessageProcessor implements IMessageProcessor {
         $response = array(
             'text' => $this->response->isSuccessful ? 
                 'Got it!  Your last scheduled rift has been cancelled!' :
-                'Sorry, I could not find a rift to cancel you have scheduled today :persevere:',
+                'Sorry, I could not find a rift to cancel you have scheduled today :persevere: \nIf you have just scheduled, please wait a few moments before trying again.',
         );
         
         $responseString = json_encode($response);

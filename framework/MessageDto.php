@@ -33,6 +33,13 @@ class ConfigureMessageDto extends BaseMessageDto {
 
 }
 
+class HelpMessageDto extends BaseMessageDto{
+
+    public $topic;
+    public $message;
+
+}
+
 class MessageDto extends BaseMessageDto {
 
     //put your code here
